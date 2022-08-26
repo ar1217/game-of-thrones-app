@@ -1,24 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Navbar from "./components/Navbar";
+import CharactersList from "./components/CharactersList";
+
+
+
+
 
 function App() {
+  const [characters, setCharacters] = useState([])
+
+  const apiURL = "https://thronesapi.com/api/v2/Characters"
+
+
+  const getAllCharacters = (url) => {
+    axios
+    .get(apiURL)
+    .then((data) => {
+      
+      setCharacters(data.data)
+
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+  }
+
+
+  useEffect(() => {
+    getAllCharacters(apiURL);
+  }, []);
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Navbar titulo="Consuming Game Of Thrones API" />
+      <div className="container">
+          <CharactersList personajes = {characters}/>
+      </div>
+    </>
   );
 }
 
